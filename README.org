@@ -133,6 +133,8 @@ This approach was impossible several years ago when I last used an org file to m
   - [[#company-configuration][Company Configuration]]
   - [[#consult][consult]]
 - [[#d][D]]
+  - [[#dashboard][dashboard]]
+  - [[#dashboard-refresh][Dashboard refresh]]
 - [[#e][E]]
   - [[#ekg][ekg]]
   - [[#embark][Embark]]
@@ -1700,10 +1702,13 @@ Extra Completion Functions
 * D
 
 #+BEGIN_SRC emacs-lisp
-
 (message "Start package configurations D")
+#+END_SRC
 
-;; dashboard
+
+** dashboard
+
+#+BEGIN_SRC emacs-lisp
 (use-package dashboard
   :ensure t
   :config
@@ -1754,19 +1759,21 @@ Extra Completion Functions
 
 ; To show agenda for the upcoming seven days set the variable dashboard-week-agenda to t.
 (setq dashboard-week-agenda t)
+#+END_SRC
 
 
 
-;; *** Dashboard refresh
-;;
-;; Function to refresh dashboard and open in the current window.
-;; This function is useful for accessing bookmarks and recent files created in the current session.
-;; The last line in the code bloack defines a global key binding to F1.
-;;
-;; Source of function by Jackson Benete Ferreira: the issues section of the [[https://github.com/emacs-dashboard/emacs-dashboard/issues/236][dashboard]] GitHub page.
-;; I edited the documentation line to fix the grammar and add the final phrase.
+** Dashboard refresh
+
+Function to refresh dashboard and open in the current window.
+This function is useful for accessing bookmarks and recent files created in the current session.
+The last line in the code bloack defines a global key binding to F1.
+
+Source of function by Jackson Benete Ferreira: the issues section of the [[https://github.com/emacs-dashboard/emacs-dashboard/issues/236][dashboard]] GitHub page.
+I edited the documentation line to fix the grammar and add the final phrase.
 
 
+#+BEGIN_SRC emacs-lisp
 (defun new-dashboard ()
   "Jump to the dashboard buffer. If it doesn't exist, create one. Refresh while at it."
   (interactive)
@@ -1775,11 +1782,11 @@ Extra Completion Functions
   (dashboard-insert-startupify-lists)
   (dashboard-refresh-buffer))
 (global-set-key (kbd "<f1>") 'new-dashboard)
+#+END_SRC
 
 
-
+#+BEGIN_SRC
 (message "Finished package configurations D")
-
 #+END_SRC
 
 
