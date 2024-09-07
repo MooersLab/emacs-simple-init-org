@@ -2060,20 +2060,19 @@ Source: https://github.com/jerrypnz/major-mode-hydra.el
 * K
 #+BEGIN_SRC emacs-lisp
 (message "Started K packages configurations")
+#+END_SRC
 
-** kind-icon
+** Kind-Icon Configuration
 
 #+BEGIN_SRC emacs-lisp
-(message "Started K packages configurations")
-;;;## Kind-Icon Configuration
-(use-package kind-icon
-  :config
-  (setq kind-icon-default-face 'corfu-default)
-  (setq kind-icon-default-style '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.9 :scale 1))
-  (setq kind-icon-blend-frac 0.08)
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
-  (add-hook 'counsel-load-theme #'(lambda () (interactive) (kind-icon-reset-cache)))
-  (add-hook 'load-theme         #'(lambda () (interactive) (kind-icon-reset-cache))))
+  (use-package kind-icon
+    :config
+    (setq kind-icon-default-face 'corfu-default)
+    (setq kind-icon-default-style '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.9 :scale 1))
+    (setq kind-icon-blend-frac 0.08)
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+    (add-hook 'counsel-load-theme #'(lambda () (interactive) (kind-icon-reset-cache)))
+    (add-hook 'load-theme         #'(lambda () (interactive) (kind-icon-reset-cache))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -2083,373 +2082,25 @@ Source: https://github.com/jerrypnz/major-mode-hydra.el
 
 * L
 
+#+BEGIN_SRC emacs-lisp
+(message "Started L packages configurations")
+#+END_SRC
+
+
+
 ** lsp-mode
 
 #+BEGIN_SRC emacs-lisp
-(message "Started L packages configurations")
-(use-package llm
-     :load-path "/Users/blaine/e29org/manual-install/llm.git/"
-     :init
-)
-
-; (use-package lsp-mode
-;     :ensure t
-;     :bind (:map lsp-mode-map
-;                 ("C-c d" . lsp-describe-thing-at-point)
-;                 ("C-c a" . lsp-execute-code-action))
-;     :bind-keymap ("C-c l" . lsp-command-map)
-;     :config
-;     (lsp-enable-which-key-integration t))
-;     :init
-;     (setq lsp-auto-guess-root nil)
-;     :hook (python-mode . lsp)
-;           (latex-mode . lsp)
-;           (lsp-mode . lsp-enable-which-key-integration)
-;     :commands lsp)
-
-(use-package lsp-mode
-  :ensure t
-  :bind (:map lsp-mode-map
-              ("C-c d" . lsp-describe-thing-at-point)
-              ("C-c a" . lsp-execute-code-action))
-  :bind-keymap ("C-c l" . lsp-command-map)
-  :config
-  (lsp-enable-which-key-integration t))
-
-(use-package lsp-ui
-    :ensure t
-    :commands lsp-ui-mode)
-
-(use-package lsp-grammarly
-    :ensure t
-    :hook (text-mode . (lambda ()
-                       (require 'lsp-grammarly)
-                       (lsp))))  ; or lsp-deferred
-
-(use-package lsp-jedi
-    :ensure t)
-
-(use-package lsp-latex
-    :ensure t)
-
-;; language-tool integration
-(use-package lsp-ltex
-    :ensure t
-    :hook (text-mode . (lambda ()
-                       (require 'lsp-ltex)
-                       (lsp)))          ; or lsp-deferred
-    :init
-  (setq lsp-ltex-version "16.0.0"))  ; make sure you have set this, see below
-
-
-(message "Finished L packages configurations")
+  (message "Started L packages configurations")
+  (use-package llm
+       :load-path "/Users/blaine/e29org/manual-install/llm.git/"
+       :init
+  )
 #+END_SRC
 
-
-* M
-
-#+BEGIN_SRC emacs-lisp
-(message "Start package configurations M")
-#+END_SRC
-
-** Marginalia Configuration
+** lsp-mode
 
 
-#+BEGIN_SRC emacs-lisp
-(use-package marginalia
-  :ensure t
-  :config
-  (marginalia-mode))
-(customize-set-variable 'marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-(marginalia-mode 1)
-
-; This has become too expensive.
-;
-; (use-package mathpix.el
-;   :load-path "manual-install/mathpix.el/"
-;   :custom ((mathpix-app-id "JJhSopoRYlQ2Dz169a")
-;            (mathpix-app-key "8cae6b1e-25aa-4c2c-8c90-e74cf6e6004e"))
-;   :bind
-;   ("C-x m" . mathpix-screenshot))
-
-#+END_SRC
-
-** Math-Preview
-#+BEGIN_SRC emacs-lisp
-(use-package math-preview
-    :ensure t
-    :custom (math-preview-command "/Users/blaine/.nvm/versions/node/v22.4.0/lib/node_modules/math-preview/math-preview.js"))
-#+END_SRC
-
-
-#+BEGIN_SRC emacs-lisp
-(message "Finished M package configurations.")
-#+END_SRC
-
-* N
-
-  (add-hook 'org-mode-hook 'toc-org-mode)
-#+BEGIN_SRC emacs-lisp
-(message "Start package configurations O.")
-#+END_SRC
-
-** orderless
-#+BEGIN_SRC emacs-lisp
-;; Optionally use the `orderless' completion style.
-(use-package orderless
-  :ensure t
-  :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
-#+END_SRC
-
-** org-agenda
-
-#+BEGIN_SRC emacs-lisp
-(define-key org-mode-map (kbd "M-i") 'org-insert-item)
-(setq org-agenda-start-with-log-mode t)
-(setq org-log-done 'time)
-(setq org-log-into-drawer t)
-
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
-;; org-capture
-(define-key global-map "\C-cc" 'org-capture)
-(define-key global-map "\C-cl" 'org-store-link)
-
-(setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
-
-(setq org-agenda-files '("/Users/blaine/gtd/tasks/JournalArticles.org"
-                         "/Users/blaine/gtd/tasks/potentialWriting.org"
-                         "/Users/blaine/gtd/tasks/Proposals.org"
-                         "/Users/blaine/gtd/tasks/Books.org"
-                         "/Users/blaine/gtd/tasks/Talks.org"
-                         "/Users/blaine/gtd/tasks/Posters.org"
-                         "/Users/blaine/gtd/tasks/ManuscriptReviews.org"
-                         "/Users/blaine/gtd/tasks/Private.org"
-                         "/Users/blaine/gtd/tasks/Service.org"
-                         "/Users/blaine/gtd/tasks/Teaching.org"
-                         "/Users/blaine/gtd/tasks/Workshops.org"
-                         "/Users/blaine/gtd/tasks/springsem24.org"
-                         "/Users/blaine/gtd/tasks/summersem24.org"
-                         "/Users/blaine/gtd/tasks/fallsem24.org"))
-(message "Finished org-agenda configuration. Line 5139.")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-;; Cycle through these keywords with shift right or left arrows.
-(setq org-todo-keywords
-        '((sequence "TODO(t)" "INITIATED(i!)" "WAITING(w!)" "CAL(a)" "SOMEDAY(s!)" "PROJ(j)" "|" "DONE(d!)" "CANCELLED(c!)")))
-
-(setq org-refile-targets '(("/Users/blaine/gtd/tasks/JournalArticles.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Proposals.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Books.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Talks.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Posters.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/ManuscriptReviews.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Private.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Service.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Teaching.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/grasscatcer.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/Workshops.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/december23.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/springsem24.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/summersem24.org" :maxlevel . 2)
-   ("/Users/blaine/gtd/tasks/fallsem24.org" :maxlevel . 2)
-   ))
-(setq org-refile-use-outline-path 'file)
-(message "Finished refile target configuration. Line 5162.")
-#+END_SRC
-
-** customized agenda views
-
-These are my customized agenda views by project.
-The letter is the last parameter.
-For example, enter ~C-c a b~ and then enter 402 at the prompt to list all active tasks related to 402 tasks.
-
-I learned about this approach [[https://tlestang.github.io/blog/keeping-track-of-tasks-and-projects-using-emacs-and-org-mode.html][here]].
-
-The CATEGORY keyword resides inside of a Properties drawer.
-The drawers are usually closed.
-I am having trouble opening my drawers in may org files.
-In addition, I do not want to have to add a drawer to each TODO.
-
-I am loving Tags now.
-I may switch to using Tags because they are visible in org files.
-I tried and they are not leading to the expect list of TODOs in org-agenda.
-I am stumped.
-
-In the meantime, enter ~C-c \~ inside JournalArticles.org to narrow the focus to the list of TODOs or enter ~C-c i b~ to have the todos shown in an indirect buffer.
-
-
-#+BEGIN_SRC emacs-lisp
-(setq org-agenda-custom-commands
-      '(
-    ("b"
-             "List of all active 402 tasks."
-             tags-todo
-             "402\"/TODO|INITIATED|WAITING")
-    ("c"
-             "List of all active 523 RNA-drug crystallization review paper tasks."
-             tags-todo
-             "CATEGORY=\"523\"/TODO|INITIATED|WAITING")
-    ("d"
-             "List of all active 485PyMOLscGUI tasks."
-             tags-todo
-             "CATEGORY=\"485\"/TODO|INITIATED|WAITING")
-    ("e"
-             "List of all active 2104 Emacs tasks"
-             tags-todo
-             "2104+CATEGORY=\"2104\"/NEXT|TODO|INITIATED|WAITING")
-    ("n"
-             "List of all active 651 ENAX2 tasks"
-             tags-todo
-             "651+CATEGORY=\"651\"/NEXT|TODO|INITIATED|WAITING")
-    ("q"
-             "List of all active 561 charge density review"
-             tags
-             "561+CATEGORY=\"211\"/NEXT|TODO|INITIATED|WAITING")
-    ("r"
-             "List of all active 211 rcl/dnph tasks"
-             tags-todo
-             "211+CATEGORY=\"211\"/NEXT|TODO|INITIATED|WAITING")
-    ("P"
-         "List of all projects"
-         tags
-         "LEVEL=2/PROJ")))
-
-(message "Finished org-agenda custum command configuration. Line 5220.")
-#+END_SRC
-
-I usually know the project to which I want to assign a task.
-I loathe having to come back latter to refile my tasks.
-I want to do the filing at the time of capture.
-I found a solution [[https://stackoverflow.com/questions/9005843/interactively-enter-headline-under-which-to-place-an-entry-using-capture][here]].
-
-A project has two or more tasks.
-I believe that the 10,000 projects is the upper limit for a 30 year academic career.
-There are about 10,000 workdays in a 30 year career if you work six days a week.
-Of course, most academics work seven a week and many work longer than 30 years, some even reach 60 years.
-
-I have my projects split into ten org files.
-Each org file has a limit of 1000 projects for ease of scrolling.
-
-It is best to let Emacs insert new task because it is easy to accidently delete sectons in an org file, especially when sections are folded.
-(I know that many love folded sections.
-There is a strong appeal to being able to collapse secitons of text.
-However, folded section are not for me; I have experienced too many catastrophes.
-I open all of my org files with all sections fully open.
-I can use swiper to navigate if I do not want to scroll.)
-Enter ~C-c c~ to start the capture menu.
-The settings below show a single letter option for selecting the appropriate org-file.
-After entering the single-letter code, you are prompted for the headline name.
-You do not have to include the TODO keyword.
-However, I changed "Headline" to "Tag" because I have the project ID was one of the tags on the same line as the project headline.
-I am now prompted for the tag.
-After entering the tag, I fill out the task entry.
-I then enter ~C-c C-c~ to save the capture.
-
-This protocol can be executed from inside the target org file or from a different buffer.
-
-I learned about the following function, which I modified by changing "Headline " to "Tag", from
-Lionel Henry]] with the modification by Phil on July 1, 2018.
-
-
-** org-ask-location
-#+BEGIN_SRC emacs-lisp
-(defun org-ask-location ()
-  (let* ((org-refile-targets '((nil :maxlevel . 9)))
-         (hd (condition-case nil
-                 (car (org-refile-get-location "Tag" nil t))
-               (error (car org-refile-history)))))
-    (goto-char (point-min))
-    (outline-next-heading)
-    (if (re-search-forward
-         (format org-complex-heading-regexp-format (regexp-quote hd))
-         nil t)
-        (goto-char (point-at-bol))
-      (goto-char (point-max))
-      (or (bolp) (insert "\n"))
-      (insert "* " hd "\n")))
-  (end-of-line))
-
-** org-capture-templates
-
-(setq org-capture-templates
- '(
-   ("j" "JournalArticles" entry
-    (file+function "/Users/blaine/gtd/tasks/JournalArticles.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("g" "GrantProposals" entry
-    (file+function "/Users/blaine/gtd/tasks/Proposals.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("b" "Books" entry
-    (file+function "/Users/blaine/gtd/tasks/Books.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("t" "Talks" entry
-    (file+function "/Users/blaine/gtd/tasks/Talks.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("p" "Posters" entry
-    (file+function "/Users/blaine/gtd/tasks/Posters.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("r" "ManuscriptReviews" entry
-    (file+function "/Users/blaine/gtd/tasks/ManuscriptReviews.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("v" "Private" entry
-    (file+function "/Users/blaine/gtd/tasks/Private.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("S" "Service" entry
-    (file+function "/Users/blaine/gtd/tasks/Service.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("T" "Teaching" entry
-    (file+function "/Users/blaine/gtd/tasks/Teaching.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("w" "Workshop" entry
-    (file+function "/Users/blaine/gtd/tasks/Workshops.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("d" "December" entry
-    (file+function "/Users/blaine/gtd/tasks/december23.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("s" "springsem24" entry
-    (file+function "/Users/blaine/gtd/tasks/springsem24.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("u" "springsem24" entry
-    (file+function "/Users/blaine/gtd/tasks/summersem24.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("f" "fallsem24" entry
-    (file+function "/Users/blaine/gtd/tasks/fallsem24.org" org-ask-location)
-    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
-    :empty-lines 1)
-    ("x" "Slipbox" entry  (file "/User/org-roam/inbox.org")
-           "* %?\n")
-    ))
-(defun jethro/org-capture-slipbox ()
-    (interactive)
-    (org-capture nil "s"))
-
-(message "Finished org-agenda configuration. Line 1432.")
-
-#+END_SRC
-
-;; https://github.com/shg/ob-julia-vterm.el
-;;(add-to-list 'org-babel-load-languages '(julia-vterm . t))
 
 
 ** org-ai
