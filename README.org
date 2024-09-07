@@ -146,6 +146,7 @@ This approach was impossible several years ago when I last used an org file to m
   - [[#helpful][helpful]]
 - [[#i][I]]
   - [[#ivy][ivy]]
+  - [[#ivy-rich][ivy-rich]]
   - [[#ivy-bibtex][ivy-bibtex]]
 - [[#j][J]]
 - [[#k][K]]
@@ -2013,8 +2014,11 @@ Source: https://github.com/jerrypnz/major-mode-hydra.el
 ;;  :init (all-the-icons-ivy-rich-mode 1)
 ;;  :config
 ;;  (setq all-the-icons-ivy-rich-icon-size 1.0))
+#+END_SRC
 
-;;
+
+** ivy-rich
+#+BEGIN_SRC emacs-lisp
 (use-package ivy-rich
   :after ivy
   :init
@@ -2027,32 +2031,35 @@ Source: https://github.com/jerrypnz/major-mode-hydra.el
 ** ivy-bibtex
 
 #+BEGIN_SRC emacs-lisp
-(use-package ivy-bibtex
-    :init
-    (setq bibtex-completion-notes-path "/Users/blaine/org-roam/references/notes/"
-          bibtex-completion-library-path '("/Users/blaine/0papersLabeled/" "/Users/blaine/0booksLabeled/")
-          bibtex-completion-notes-path "/Users/blaine/org-roam/references/notes/"
-        bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
-        bibtex-completion-additional-search-fields '(keywords)
-        bibtex-completion-display-formats
-        '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
-          (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
-          (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-          (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-          (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
-        bibtex-completion-pdf-open-function
-        (lambda (fpath)
-          (call-process "open" nil 0 nil fpath)))
-)
+    (use-package ivy-bibtex
+        :init
+        (setq bibtex-completion-notes-path "/Users/blaine/org-roam/references/notes/"
+              bibtex-completion-library-path '("/Users/blaine/0papersLabeled/" "/Users/blaine/0booksLabeled/")
+              bibtex-completion-notes-path "/Users/blaine/org-roam/references/notes/"
+            bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+            bibtex-completion-additional-search-fields '(keywords)
+            bibtex-completion-display-formats
+            '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+              (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+              (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+              (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+              (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+            bibtex-completion-pdf-open-function
+            (lambda (fpath)
+              (call-process "open" nil 0 nil fpath))))
+#+END_SRC
 
-(message "Finished I packages configurations")
+
+#+BEGIN_SRC emacs-lisp
+    (message "Finished I packages configurations")
 #+END_SRC
 
 
 
 * J
 * K
-
+#+BEGIN_SRC emacs-lisp
+(message "Started K packages configurations")
 
 ** kind-icon
 
@@ -2067,10 +2074,12 @@ Source: https://github.com/jerrypnz/major-mode-hydra.el
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
   (add-hook 'counsel-load-theme #'(lambda () (interactive) (kind-icon-reset-cache)))
   (add-hook 'load-theme         #'(lambda () (interactive) (kind-icon-reset-cache))))
-
-(message "Finished K packages configurations")
-
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(message "Finished K packages configurations")
+#+END_SRC
+
 
 * L
 
