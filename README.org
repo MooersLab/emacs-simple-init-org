@@ -27,4 +27,9 @@ This approach was not possible when several years ago when I last used a org fil
   - Use the my org-toc-generate function to generate a table of contents. They will show up in separate buffer. You will have to copy and paste them into init.org.
 
 #+TOC: headlines
+* [[A]]
+* [[B]]
 
+* A
+
+* B
