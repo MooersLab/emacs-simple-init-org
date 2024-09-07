@@ -2558,21 +2558,18 @@ I ran out of time to time out how to render an active region. I need to find the
 
 ** toc-org
 
-Place a ~:TOC: at the top of a file by a headline like table of contents, and it will be automatically inserted into the table of contents.
+Place a ~:TOC:~ at the top of a file by a headline like table of contents, and it will be automatically inserted into the table of contents.
 
-#+BEGIN_SRC emacs-lisp
-  (use-package toc-org
-      :ensure t)
-
-  (if (require 'toc-org nil t)
-    (progn
-      (add-hook 'org-mode-hook 'toc-org-mode)
-
-      ;; enable in markdown, too
-      (add-hook 'markdown-mode-hook 'toc-org-mode)
-      (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point))
-  (warn "toc-org not found"))
-#+END_SRC
+# +BEGIN_SRC emacs-lisp
+# (if (require 'toc-org nil t)
+#     (progn
+#       (add-hook 'org-mode-hook 'toc-org-mode)
+#
+#       ;; enable in markdown, too
+#       (add-hook 'markdown-mode-hook 'toc-org-mode)
+#       (define-key markdown-mode-map (kbd "\C-c\C-o") 'toc-org-markdown-follow-thing-at-point))
+#   (warn "toc-org not found"))
+# +END_SRC
 
 
 
