@@ -1,5 +1,8 @@
 * Emacs 29 configuration from the README.org file.
 
+** Status
+My current work version. I have yet to add headlines for all of the packages.
+
 ** Why use an org file to manage your Emacs configuration?
 
 The main reason is to ease navigation of the configuration file once it becomes longer than the length of the screen.
