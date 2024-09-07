@@ -1,6 +1,5 @@
 * Emacs 29 configuration from the README.org file.
 
-:DIRECTIONS:
 ** Why use a org file to manage your Emacs configuration?
 
 The main reason is to ease navigation of the configuration file once it becomes longer than the length of the screen.
@@ -28,10 +27,6 @@ This approach was not possible when several years ago when I last used a org fil
   - Place elisp code in org mode source blocks. Use my wrap-region-with-org-src-block function to warp marked regions of elisp in org-mode source blocks
   - Add org-style headlines
   - Use the my org-toc-generate function to generate a table of contents. They will show up in separate buffer. You will have to copy and paste them into init.org.
-:END:
-
-
-
 
 
 #+TOC: headlines
