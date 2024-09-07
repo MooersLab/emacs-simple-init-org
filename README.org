@@ -1,33 +1,34 @@
 * Emacs 29 configuration from the README.org file.
 
-
 ** Why use an org file to manage your Emacs configuration?
 
 The main reason is to ease navigation of the configuration file once it becomes longer than the length of the screen.
 Mine tend to be several thousand lines long.
 Scrolling up and down is a pain.
-You can collapse the file tree in org to ease significantly navigation.
+You can collapse the file tree in org to ease navigation significantly.
 You can also set up a table of contents with links to specific sites further down in the file.
 
 ** A simple approach
 
 I found a simple approach to using an org file to configure Emacs.
 This is possible now because org-mode is built into GNU Emacs.
-This approach was not possible several years ago when I last used an org file to manage my Emacs configuration.
+This approach was impossible several years ago when I last used an org file to manage my Emacs configuration.
 
-1. You place the following two lines of code in a *init.el* file after you move your existing *init.el* file to a safe place. Include nothing else. Emacs will write some lines of customization during the first boot up of Emacs.
+
 
 #+BEGIN_EXAMPLE
 (require 'org)
 (org-babel-load-file (expand-file-name "init.org" user-emacs-directory))
 #+END_EXAMPLE
 
+1. You place the above two lines of code in a *init.el* file after you move your existing *init.el* file to a safe place. Include nothing else. Emacs will write some lines of customization during the first boot up of Emacs.
+
 2. Build your init.org file.
   - Place elisp code in org-mode source blocks. Use my ~wrap-region-with-org-src-block~ function to warp marked regions of elisp in org-mode source blocks
   - Add org-style headlines
   - Use 
 
-3. Install the toc-org package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links.
+3. Install the *toc-org* package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links.
 
 
 * Table of Contents :TOC:
