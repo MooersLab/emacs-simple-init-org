@@ -16,10 +16,10 @@ This approach was not possible when several years ago when I last used a org fil
 
 1. You place the following two lines of code in a *init.el* file after you move your existing *init.el* file to a safe place. Include nothing else. Emacs will write some lines of customization during the first boot up of Emacs.
 
-#+BEGIN_SRC markdown
+#+BEGIN_EXAMPLE
 (require 'org)
 (org-babel-load-file (expand-file-name "init.org" user-emacs-directory))
-#+END_SRC
+#+END_EXAMPLE
 
 2. Build your init.org file.
   - Place elisp code in org mode source blocks. Use my wrap-region-with-org-src-block function to warp marked regions of elisp in org-mode source blocks
