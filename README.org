@@ -1,9 +1,3 @@
-# #+Property: Header-args :tangle init2.el
-# #+auto-tangle: t
-# #+AUTHOR: Blaine Mooers
-
-# ;; alias e29o='/Applications/Emacs29.3.app/Contents/MacOS/Emacs --init-directory ~/e29org --debug-init'
-
 * Emacs 29 configuration from the README.org file.
 
 
