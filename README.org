@@ -1408,7 +1408,7 @@ This is a window management package that allows you to switch between windows.
 ** citar
 
 #+BEGIN_SRC emacs-lisp
-  (use-package citar
+(use-package citar
     :bind (("C-c b" . citar-insert-citation)
            :map minibuffer-local-map
            ("M-b" . citar-insert-preset))
@@ -1426,8 +1426,8 @@ This is a window management package that allows you to switch between windows.
 #+END_SRC
 
  *** citar-org
-
- Use after org-cite. It is not loaded.
+ 
+Use after org-cite. It is not loaded.
 
 #+BEGIN_SRC emacs-lisp
  ; (use-package citar-org
@@ -1450,8 +1450,6 @@ This is a window management package that allows you to switch between windows.
 #+END_SRC
 
 *** cite-embark
-
-
 #+BEGIN_SRC emacs-lisp
 (use-package citar-embark
   ;; get a table of options including opening related files and the entry in global.bib.
@@ -1462,7 +1460,8 @@ This is a window management package that allows you to switch between windows.
 
 
 *** citar-org-roam
-#+BEGIN_SRC emacs-lisp
+
+
 #+BEGIN_SRC emacs-lisp
 (use-package citar-org-roam
       :after (citar org-roam)
