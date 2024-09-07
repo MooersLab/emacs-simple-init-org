@@ -1,4 +1,4 @@
-* Emacs 29 configuration from the README.org file.
+* Emacs 29 configuration from a README.org file.
 
 * Preface
 ** Status
