@@ -5,7 +5,7 @@
 
 The main reason is to ease navigation of the configuration file once it becomes longer than the length of the screen.
 Mine tend to be several thousand lines long.
-Screwing up and down is there a pain.
+Scrolling up and down is a pain.
 You can collapse the file tree in org to ease significantly navigation.
 You can also set up a table of contents with links to specific sites further down in the file.
 
@@ -27,7 +27,7 @@ This approach was not possible several years ago when I last used an org file to
   - Add org-style headlines
   - Use 
 
-3. Install the toc-org package frpom MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub compatible TOC will be generated as internal links.
+3. Install the toc-org package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links.
 
 
 * Table of Contents :TOC:
