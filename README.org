@@ -1,23 +1,31 @@
 * Emacs 29 configuration from the README.org file.
 
+* Preface
 ** Status
-My current work version. I have yet to add headlines for all of the packages.
+This is my current working version in mid-2024. I have yet to add headlines for all of the packages. This configuration is skewed toward supporting academic research tasks like bibliographic management, writing papers, and assembling grant applications in org-mode or LaTeX.
 
 ** Why use an org file to manage your Emacs configuration?
 
-The main reason is to ease navigation of the configuration file once it becomes longer than the length of the screen.
+The main reason is to ease the navigation of the configuration file once it becomes longer than the length of the screen in Emacs.
 Mine tend to be several thousand lines long.
 Scrolling up and down is a pain.
-You can collapse the file tree in org to ease navigation significantly.
+You can collapse the file tree in org to ease navigation significantly. Enter Meta-Shift with the cursor on the top-level headline to cycle through the folding of the headlines.
 You can also set up a table of contents with links to specific sites further down in the file.
+You could even add a backlink to the TOC.
+
+A secondary reason is to ease adding notes about using the packages and functions.
+
+** Why post this GitHub?
+
+- Others can copy the code blocks of interest for their *init.el* files.
+- I will have a backup if my computer dies or is stolen.
+- I can view the beautiful rendered version on-line.
 
 ** A simple approach
 
 I found a simple approach to using an org file to configure Emacs.
-This is possible now because org-mode is built into GNU Emacs.
+This approach is possible now because org-mode is built into GNU Emacs.
 This approach was impossible several years ago when I last used an org file to manage my Emacs configuration.
-
-
 
 #+BEGIN_EXAMPLE
 (require 'org)
@@ -31,9 +39,9 @@ This approach was impossible several years ago when I last used an org file to m
   - Add org-style headlines
   - Use 
 
-3. Install the *toc-org* package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links when you reload the *init.org* file.
+3. Install the *toc-org* package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links when you reload the *init.org* file. You will not have to manually edit the TOC as you make additions.
 
-4. If you post the *init.org* file on GitHub, rename it *README.org*, and it will then be rendered nicely on GitHub. Bugs that prevent the rendering by Github might not prevent its use by Emacs. Some org-mode features [[https://github.com/novoid/github-orgmode-tests][do not work on GitHub]].
+4. If you want to post your *init.org* file on GitHub, rename it *README.org*, and it will be rendered nicely on GitHub. Bugs that prevent the rendering by Github might not prevent its use by Emacs. Some org-mode features [[https://github.com/novoid/github-orgmode-tests][do not work on GitHub]].
 
 - The ~#+TOC~ is not supported.
 - TODO items are not supported.
