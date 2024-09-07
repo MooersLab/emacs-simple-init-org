@@ -28,7 +28,19 @@ This approach was impossible several years ago when I last used an org file to m
   - Add org-style headlines
   - Use 
 
-3. Install the *toc-org* package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links.
+3. Install the *toc-org* package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links when you reload the *init.org* file.
+
+4. If you post the *init.org* file on GitHub, rename it *README.org*, and it will then be rendered nicely on GitHub. Bugs that prevent the rendering by Github might not prevent its use by Emacs. Some org-mode features [[https://github.com/novoid/github-orgmode-tests][do not work on GitHub]].
+
+- The ~#+TOC~ is not supported.
+- TODO items are not supported.
+- Drawers do not work.
+- Line breaks are often disregarded, which can affect the formatting of your text.
+- Features like custom LaTeX fragments, certain HTML tags, and complex table structures may not render as expected.
+- Elements such as ~#+BEGIN_SRC~ and ~#+BEGIN_EXAMPLE~ might not display correctly.
+- Code blocks with specific language syntax highlighting may not be supported.
+- Checkboxes, radio buttons, and interactive elements are not supported.
+
 
 
 * Table of Contents :TOC:
