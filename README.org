@@ -139,6 +139,7 @@ This approach was impossible several years ago when I last used an org file to m
   - [[#ekg][ekg]]
   - [[#embark][Embark]]
 - [[#f][F]]
+  - [[#flycheck][flycheck]]
 - [[#g][G]]
 - [[#h][H]]
   - [[#hydra][hydra]]
@@ -1792,15 +1793,19 @@ I edited the documentation line to fix the grammar and add the final phrase.
 
 * E
 
+
+#+BEGIN_SRC emacs-lisp
 (message "Start package configurations E")
+#+END_SRC
 
 ** ekg
+
+https://github.com/ahyatt/ekg?tab=readme-ov-file
+https://github.com/ahyatt/ekg/blob/develop/doc/ekg.org
+https://github.com/ahyatt/llm
+https://ollama.com/search?q=&c=embedding
+https://ollama.com/library
 #+BEGIN_SRC emacs-lisp
-;; https://github.com/ahyatt/ekg?tab=readme-ov-file
-;; https://github.com/ahyatt/ekg/blob/develop/doc/ekg.org
-;; https://github.com/ahyatt/llm
-;; https://ollama.com/search?q=&c=embedding
-;; https://ollama.com/library
 (use-package ekg
   :bind (("C-c C-k" . ekg-capture))
   :init
@@ -1817,130 +1822,152 @@ I edited the documentation line to fix the grammar and add the final phrase.
   ; (let ((my-provider (make-llm-openai :key "my-openai-api-key")))
   ;   (setq ekg-llm-provider my-provider
   ;         ekg-embedding-provider my-provider)))
-
 #+END_SRC
 
 
 ** Embark
 #+BEGIN_SRC emacs-lisp
+  (use-package embark
+    :ensure t
+    :bind
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ("M-." . embark-dwim)        ;; good alternative: M-.
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-(use-package embark
-  :ensure t
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("M-." . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    :init
 
-  :init
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
 
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
+    ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+    ;; strategy, if you want to see the documentation from multiple providers.
+    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
-  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
-  ;; strategy, if you want to see the documentation from multiple providers.
-  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+    :config
 
-  :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
 
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :ensure t ; only need to install it, embark loads it after consult if found
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+END_SRC
 
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
-(message "Finished package configurations E")
+#+BEGIN_SRC
+  (message "Finished package configurations E")
 #+END_SRC
 
 * F
 
 #+BEGIN_SRC emacs-lisp
-(message "Started package configurations F")
-(use-package flycheck
-  :ensure t)
+    (message "Started package configurations F")
+#+END_SRC
 
 
+** flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+      :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (message "Finished package configurations F")
-
 #+END_SRC
 
 * G
+
 #+BEGIN_SRC emacs-lisp
 (message "Started package configurations G")
-(use-package general)
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(use-package general)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (message "Finished package configurations G")
 #+END_SRC
 
 
 * H
 
-** hydra
+
 #+BEGIN_SRC emacs-lisp
-(message "Start H packages configurations")
-
-;; major-mode-hydra
-;; source https://github.com/jerrypnz/major-mode-hydra.el
-(use-package major-mode-hydra
-  :bind
-  ("s-SPC" . major-mode-hydra))
-
-(major-mode-hydra-define emacs-lisp-mode nil
-  ("Eval"
-   (("b" eval-buffer "buffer")
-    ("e" eval-defun "defun")
-    ("r" eval-region "region"))
-   "REPL"
-   (("I" ielm "ielm"))
-   "Test"
-   (("t" ert "prompt")
-    ("T" (ert t) "all")
-    ("F" (ert :failed) "failed"))
-   "Doc"
-   (("d" describe-foo-at-point "thing-at-pt")
-    ("f" describe-function "function")
-    ("v" describe-variable "variable")
-    ("i" info-lookup-symbol "info lookup"))))
-
-(message "Finished hydra package configurations")
-
+   (message "Start H packages configurations")
 #+END_SRC
+
+** hydra
+
+Source: https://github.com/jerrypnz/major-mode-hydra.el
+
+#+BEGIN_SRC emacs-lisp
+   (use-package major-mode-hydra
+     :bind
+     ("s-SPC" . major-mode-hydra))
+
+   (major-mode-hydra-define emacs-lisp-mode nil
+     ("Eval"
+      (("b" eval-buffer "buffer")
+       ("e" eval-defun "defun")
+       ("r" eval-region "region"))
+      "REPL"
+      (("I" ielm "ielm"))
+      "Test"
+      (("t" ert "prompt")
+       ("T" (ert t) "all")
+       ("F" (ert :failed) "failed"))
+      "Doc"
+      (("d" describe-foo-at-point "thing-at-pt")
+       ("f" describe-function "function")
+       ("v" describe-variable "variable")
+       ("i" info-lookup-symbol "info lookup"))))
+
+   (message "Finished hydra package configurations")
+#+END_SRC
+
+
 
 ** helpful
 
 #+BEGIN_SRC emacs-lisp
-  (use-package helpful)
+    (use-package helpful)
 
-  ;; Note that the built-in `describe-function' includes both functions
-  ;; and macros. `helpful-function' is functions only, so we provide
-  ;; `helpful-callable' as a drop-in replacement.
-  (global-set-key (kbd "C-h f") #'helpful-callable)
+    ;; Note that the built-in `describe-function' includes both functions
+    ;; and macros. `helpful-function' is functions only, so we provide
+    ;; `helpful-callable' as a drop-in replacement.
+    (global-set-key (kbd "C-h f") #'helpful-callable)
 
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-h x") #'helpful-command)
+    (global-set-key (kbd "C-h v") #'helpful-variable)
+    (global-set-key (kbd "C-h k") #'helpful-key)
+    (global-set-key (kbd "C-h x") #'helpful-command)
 
-  ;; Lookup the current symbol at point. C-c C-d is a common keybinding
-  ;; for this in lisp modes.
-  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+    ;; Lookup the current symbol at point. C-c C-d is a common keybinding
+    ;; for this in lisp modes.
+    (global-set-key (kbd "C-c C-d") #'helpful-at-point)
 
-  ;; Look up *F*unctions (excludes macros).
-  ;;
-  ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
-  ;; already links to the manual, if a function is referenced there.
-  (global-set-key (kbd "C-h F") #'helpful-function)
+    ;; Look up *F*unctions (excludes macros).
+    ;;
+    ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+    ;; already links to the manual, if a function is referenced there.
+    (global-set-key (kbd "C-h F") #'helpful-function)
 
-  (setq counsel-describe-function-function #'helpful-callable)
-  (setq counsel-describe-variable-function #'helpful-variable)
-
-(message "Finished package configurations H")
+    (setq counsel-describe-function-function #'helpful-callable)
+    (setq counsel-describe-variable-function #'helpful-variable)
 #+END_SRC
+
+
+
+#+BEGIN_SRC emacs-lisp
+  (message "Finished package configurations H")
+#+END_SRC
+
 
 
 
