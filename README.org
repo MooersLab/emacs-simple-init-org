@@ -50,7 +50,7 @@ This approach was impossible several years ago when I last used an org file to m
 
 4. If you want to post your *init.org* file on GitHub, rename it *README.org*, and it will be rendered nicely on GitHub.
    Bugs that prevent the rendering by Github might not prevent its use by Emacs.
-   Some org-mode features are not render on  [[https://github.com/novoid/github-orgmode-tests][do GitHub]].
+   Some org-mode features prevent rendering on [[https://github.com/novoid/github-orgmode-tests][GitHub]].
 
 - The ~#+TOC~ is not supported.
 - TODO items are not supported.
@@ -74,7 +74,7 @@ This approach was impossible several years ago when I last used an org file to m
 - [[#customizations][Customizations]]
   - [[#garbage-collection][garbage collection]]
   - [[#settings][Settings]]
-  -  [[#elisp-functions-by-me-and-others][Elisp functions by me and others]]
+  - [[#elisp-functions-by-me-and-others][Elisp functions by me and others]]
   - [[#shell-configuration][Shell configuration]]
   - [[#faked-full-screen][Faked full screen]]
   - [[#backups][Backups]]
@@ -316,9 +316,9 @@ This approach was impossible several years ago when I last used an org file to m
 
 
 
-**  Elisp functions by me and others
+** Elisp functions by me and others
 
-*** description list for LaTeX
+*** description list for LaTeX from markdown list
 
 #+BEGIN_SRC emacs-lisp
     (message "Begin custom elisp functions section.")
@@ -345,7 +345,7 @@ This approach was impossible several years ago when I last used an org file to m
 
 
 
-*** enumerate list for LaTeX
+*** enumerate list for LaTeX from markdown list
 
 #+BEGIN_SRC emacs-lisp
   ;;;### M-x enumerate
@@ -368,7 +368,7 @@ This approach was impossible several years ago when I last used an org file to m
 #+END_SRC
 
 
-*** itemized list from a markdown list
+*** itemized list for LateX from markdown list
 
 Converts a selected markdown list into an itemized list.
 The elements of the list must begin with a dash.
