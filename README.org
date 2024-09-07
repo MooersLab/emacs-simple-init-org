@@ -2,24 +2,27 @@
 
 * Preface
 ** Status
-This is my current working version in mid-2024. I have yet to add headlines for all of the packages. This configuration is skewed toward supporting academic research tasks like bibliographic management, writing papers, and assembling grant applications in org-mode or LaTeX.
+This is my current working version in mid-2024.
+I have yet to add headlines for all packages.
+This configuration is skewed toward supporting academic research tasks like bibliographic management, writing papers, and assembling grant applications in org-mode or LaTeX.
 
 ** Why use an org file to manage your Emacs configuration?
 
 The main reason is to ease the navigation of the configuration file once it becomes longer than the length of the screen in Emacs.
 Mine tend to be several thousand lines long.
 Scrolling up and down is a pain.
-You can collapse the file tree in org to ease navigation significantly. Enter Meta-Shift with the cursor on the top-level headline to cycle through the folding of the headlines.
+You can collapse the file tree in org to ease navigation significantly. Enter Meta-Shift repeatedly with the cursor on the top-level headline to cycle through the folding of the headlines.
 You can also set up a table of contents with links to specific sites further down in the file.
 You could even add a backlink to the TOC.
 
 A secondary reason is to ease adding notes about using the packages and functions.
+These notes can include links, equations, plots, and tables.
 
 ** Why post this GitHub?
-
+- One way to render the org file into HTML.
 - Others can copy the code blocks of interest for their *init.el* files.
 - I will have a backup if my computer dies or is stolen.
-- I can view the beautiful rendered version on-line.
+
 
 ** A simple approach
 
@@ -32,16 +35,22 @@ This approach was impossible several years ago when I last used an org file to m
 (org-babel-load-file (expand-file-name "init.org" user-emacs-directory))
 #+END_EXAMPLE
 
-1. You place the above two lines of code in a *init.el* file after you move your existing *init.el* file to a safe place. Include nothing else. Emacs will write some lines of customization during the first boot up of Emacs.
+1. You place the above two lines of code in a *init.el* file after you have moved your existing *init.el* file to a safe place. Include nothing else. Emacs will write some lines of customization during the first boot up of Emacs.
 
 2. Build your init.org file.
-  - Place elisp code in org-mode source blocks. Use my ~wrap-region-with-org-src-block~ function to warp marked regions of elisp in org-mode source blocks
+  - Place elisp code in org-mode source blocks. Use my elisp  ~wrap-region-with-org-src-block~ function to warp marked regions of elisp in org-mode source blocks
   - Add org-style headlines
-  - Use 
+  - Move comments outside of the source blocks and uncomment them.
 
-3. Install the *toc-org* package from MELPA. Place a TOC tag on a TOC headline. This will indicate  where the headline is to go.  A GitHub-compatible TOC will be generated as internal links when you reload the *init.org* file. You will not have to manually edit the TOC as you make additions.
+3. Install the *toc-org* package from MELPA.
+   Place a TOC tag on a TOC headline.
+   This will indicate  where the headline is to go.
+   A GitHub-compatible TOC will be generated as internal links when you reload the *init.org* file.
+   You will not have to manually edit the TOC as you make additions or deletions.
 
-4. If you want to post your *init.org* file on GitHub, rename it *README.org*, and it will be rendered nicely on GitHub. Bugs that prevent the rendering by Github might not prevent its use by Emacs. Some org-mode features [[https://github.com/novoid/github-orgmode-tests][do not work on GitHub]].
+4. If you want to post your *init.org* file on GitHub, rename it *README.org*, and it will be rendered nicely on GitHub.
+   Bugs that prevent the rendering by Github might not prevent its use by Emacs.
+   Some org-mode features are not render on  [[https://github.com/novoid/github-orgmode-tests][do GitHub]].
 
 - The ~#+TOC~ is not supported.
 - TODO items are not supported.
@@ -55,8 +64,11 @@ This approach was impossible several years ago when I last used an org file to m
 
 
 * Table of Contents :TOC:
-- [[#emacs-29-configuration-from-the-readmeorg-file][Emacs 29 configuration from the README.org file.]]
-  - [[#why-use-a-org-file-to-manage-your-emacs-configuration][Why use a org file to manage your Emacs configuration?]]
+- [[#emacs-29-configuration-from-a-readmeorg-file][Emacs 29 configuration from a README.org file.]]
+- [[#preface][Preface]]
+  - [[#status][Status]]
+  - [[#why-use-an-org-file-to-manage-your-emacs-configuration][Why use an org file to manage your Emacs configuration?]]
+  - [[#why-post-this-github][Why post this GitHub?]]
   - [[#a-simple-approach][A simple approach]]
 - [[#package-management][Package management]]
 - [[#customizations][Customizations]]
@@ -110,8 +122,16 @@ This approach was impossible several years ago when I last used an org file to m
   - [[#zoom-text-in-and-out-very-sweet][Zoom text in and out. Very Sweet!]]
   - [[#aliases][Aliases]]
 - [[#a][A]]
+  - [[#ace-window][ace-window]]
+  - [[#auctex][auctex]]
 - [[#b][B]]
 - [[#c][C]]
+  - [[#citar][citar]]
+  - [[#corfu][corfu]]
+  - [[#cape-configuration][Cape Configuration]]
+  - [[#company-box][company-box]]
+  - [[#company-configuration][Company Configuration]]
+  - [[#consult][consult]]
 - [[#d][D]]
 - [[#e][E]]
   - [[#ekg][ekg]]
@@ -133,9 +153,11 @@ This approach was impossible several years ago when I last used an org file to m
   - [[#marginalia-configuration][Marginalia Configuration]]
   - [[#math-preview][Math-Preview]]
 - [[#n][N]]
-- [[#o][O]]
-  - [[#beginning-of-org-agenda][BEGINNING of org-agenda]]
+  - [[#orderless][orderless]]
+  - [[#org-agenda][org-agenda]]
   - [[#customized-agenda-views][customized agenda views]]
+  - [[#org-ask-location][org-ask-location]]
+  - [[#org-capture-templates][org-capture-templates]]
   - [[#org-ai][org-ai]]
   - [[#org-babel][org-babel]]
   - [[#org-cc][org-cc]]
@@ -1326,8 +1348,14 @@ Usage: M-x ct
 * A
 #+BEGIN_SRC emacs-lisp
 (message "Start package configurations A")
+#+END_SRC
 
-;;** ace-window
+
+** ace-window
+
+This is a window management package that allows you to switch between windows.
+
+#+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "M-o") 'ace-window)
 ;; the list of initial characters used in window labels:
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
@@ -1346,17 +1374,23 @@ Usage: M-x ct
 	(?o delete-other-windows "Delete Other Windows")
 	(?? aw-show-dispatch-help))
   "List of actions for `aw-dispatch-default'.")
+#+END_SRC
 
 
-
+** auctex
+#+BEGIN_SRC emacs-lisp
 (use-package auctex
   :ensure t
   :defer t
   :hook (LaTeX-mode . (lambda ()
 			(push (list 'output-pdf "Skim")
 			      TeX-view-program-selection))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (message "Finished A package configuraitons.")
 #+END_SRC
+
 
 * B
 
@@ -1365,257 +1399,300 @@ Usage: M-x ct
 
 #+BEGIN_SRC emacs-lisp
 (message "Start package configurations C")
-(use-package citar
-  :bind (("C-c b" . citar-insert-citation)
-         :map minibuffer-local-map
-         ("M-b" . citar-insert-preset))
-  :custom
-    (citar-bibliography '("/Users/blaine/Documents/global.bib"))
-    (citar-library-paths '("/Users/blaine/0papersLabeled") '("/Users/blaine/0booksUnlabeled"))
-    (citar-library-file-extensions '("pdf" "epub"))
-  :hook
-  ;; enable autocompletion in buffer of citekeys
-    (LaTeX-mode . citar-capf-setup)
-    (org-mode . citar-capf-setup))
+#+END_SRC
 
-(setenv "PATH" (concat "/usr/local/bin/:/opt/local/bin/" (getenv "PATH")))
-(add-to-list 'exec-path "/usr/local/bin:/opt/local/bin/")
+** citar
 
-;;*** citar-org, use after org-cite. It is not loaded.
-; (use-package citar-org
-;   :after oc
-;   :custom
-;   (org-cite-insert-processor 'citar)
-;   (org-cite-follow-processor 'citar)
-;   (org-cite-activate-processor 'citar)
-;   :general
-;   (:keymaps 'org-mode-map
-;    :prefix "C-c b"
-;    "b" '(citar-insert-citation :wk "Insert citation")
-;    "r" '(citar-insert-reference :wk "Insert reference")
-;    "o" '(citar-open-notes :wk "Open note"))
-;   :custom
-;   (citar-notes-paths '("/Users/blaine/org-roam/citar-org-roam")) ; List of directories for reference nodes
-;   (citar-open-note-function 'orb-citar-edit-note) ; Open notes in `org-roam'
-;   (citar-at-point-function 'embark-act)           ; Use `embark'
-;   )
+#+BEGIN_SRC emacs-lisp
+  (use-package citar
+    :bind (("C-c b" . citar-insert-citation)
+           :map minibuffer-local-map
+           ("M-b" . citar-insert-preset))
+    :custom
+      (citar-bibliography '("/Users/blaine/Documents/global.bib"))
+      (citar-library-paths '("/Users/blaine/0papersLabeled") '("/Users/blaine/0booksUnlabeled"))
+      (citar-library-file-extensions '("pdf" "epub"))
+    :hook
+    ;; enable autocompletion in buffer of citekeys
+      (LaTeX-mode . citar-capf-setup)
+      (org-mode . citar-capf-setup))
+
+  (setenv "PATH" (concat "/usr/local/bin/:/opt/local/bin/" (getenv "PATH")))
+  (add-to-list 'exec-path "/usr/local/bin:/opt/local/bin/")
+#+END_SRC
+
+ *** citar-org
+
+ Use after org-cite. It is not loaded.
+
+#+BEGIN_SRC emacs-lisp
+ ; (use-package citar-org
+  ;   :after oc
+  ;   :custom
+  ;   (org-cite-insert-processor 'citar)
+  ;   (org-cite-follow-processor 'citar)
+  ;   (org-cite-activate-processor 'citar)
+  ;   :general
+  ;   (:keymaps 'org-mode-map
+  ;    :prefix "C-c b"
+  ;    "b" '(citar-insert-citation :wk "Insert citation")
+  ;    "r" '(citar-insert-reference :wk "Insert reference")
+  ;    "o" '(citar-open-notes :wk "Open note"))
+  ;   :custom
+  ;   (citar-notes-paths '("/Users/blaine/org-roam/citar-org-roam")) ; List of directories for reference nodes
+  ;   (citar-open-note-function 'orb-citar-edit-note) ; Open notes in `org-roam'
+  ;   (citar-at-point-function 'embark-act)           ; Use `embark'
+  ;   )
+#+END_SRC
+
+*** cite-embark
 
 
+#+BEGIN_SRC emacs-lisp
 (use-package citar-embark
   ;; get a table of options including opening related files and the entry in global.bib.
-  :after citar embark
-  :no-require
-  :config (citar-embark-mode))
+      :after citar embark
+      :no-require
+      :config (citar-embark-mode))
+#+END_SRC
 
+
+*** citar-org-roam
+#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (use-package citar-org-roam
-    :after (citar org-roam)
-    :no-require
-    :config (citar-org-roam-mode))
+      :after (citar org-roam)
+      :no-require
+      :config (citar-org-roam-mode))
+#+END_SRC
 
+
+#+BEGIN_SRC emacs-lisp
 (message "Finished citar package configuration.")
+#+END_SRC
 
 
-(use-package codeium
-   :load-path "/Users/blaine/e29org/manual-install/codeium.el/"
-   :init
-   ;; use globally
-   (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-   ;; or on a hook
-   ;; (add-hook 'python-mode-hook
-   ;;     (lambda ()
-   ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
+#+BEGIN_SRC emacs-lisp
+  (use-package codeium
+     :load-path "/Users/blaine/e29org/manual-install/codeium.el/"
+     :init
+     ;; use globally
+     (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+     ;; or on a hook
+     ;; (add-hook 'python-mode-hook
+     ;;     (lambda ()
+     ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
 
-   ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
-   ;; (add-hook 'python-mode-hook
-   ;;     (lambda ()
-   ;;         (setq-local completion-at-point-functions
-   ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
-   ;; an async company-backend is coming soon!
+     ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
+     ;; (add-hook 'python-mode-hook
+     ;;     (lambda ()
+     ;;         (setq-local completion-at-point-functions
+     ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
+     ;; an async company-backend is coming soon!
 
-   ;; codeium-completion-at-point is autoloaded, but you can
-   ;; optionally set a timer, which might speed up things as the
-   ;; codeium local language server takes ~0.2s to start up
-   ;; (add-hook 'emacs-startup-hook
-   ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+     ;; codeium-completion-at-point is autoloaded, but you can
+     ;; optionally set a timer, which might speed up things as the
+     ;; codeium local language server takes ~0.2s to start up
+     ;; (add-hook 'emacs-startup-hook
+     ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
 
-   ;; :defer t ;; lazy loading, if you want
+     ;; :defer t ;; lazy loading, if you want
 
-   :config
-   (setq use-dialog-box nil) ;; do not use popup boxes
+     :config
+     (setq use-dialog-box nil) ;; do not use popup boxes
 
-   ;; if you don't want to use customize to save the api-key
-   ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+     ;; if you don't want to use customize to save the api-key
+     ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 
-   ;; get codeium status in the modeline
-   (setq codeium-mode-line-enable
-       (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-   (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-   ;; alternatively for a more extensive mode-line
-   ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+     ;; get codeium status in the modeline
+     (setq codeium-mode-line-enable
+         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+     (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+     ;; alternatively for a more extensive mode-line
+     ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
 
-   ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
-   (setq codeium-api-enabled
-       (lambda (api)
-           (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-   ;; you can also set a config for a single buffer like this:
-   ;; (add-hook 'python-mode-hook
-   ;;     (lambda ()
-   ;;         (setq-local codeium/editor_options/tab_size 4)))
+     ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+     (setq codeium-api-enabled
+         (lambda (api)
+             (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+     ;; you can also set a config for a single buffer like this:
+     ;; (add-hook 'python-mode-hook
+     ;;     (lambda ()
+     ;;         (setq-local codeium/editor_options/tab_size 4)))
 
-   ;; You can overwrite all the codeium configs!
-   ;; for example, we recommend limiting the string sent to codeium for better performance
-   (defun my-codeium/document/text ()
-       (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-   ;; if you change the text, you should also change the cursor_offset
-   ;; warning: this is measured by UTF-8 encoded bytes
-   (defun my-codeium/document/cursor_offset ()
-       (codeium-utf8-byte-length
-           (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-   (setq codeium/document/text 'my-codeium/document/text)
-   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
-   )
-(message "Finished codeium package configuration")
-
-
-
-(message "Started corfu package configuration")
-;;;## Corfu configuration
-(use-package corfu
-  :ensure t
-  :init
-  (setq tab-always-indent 'complete)
-  (global-corfu-mode)
-  :config
-  (setq corfu-auto t
-        corfu-echo-documentation t
-        corfu-scroll-margin 0
-        corfu-count 8
-        corfu-max-width 50
-        corfu-min-width corfu-max-width
-        corfu-auto-prefix 2)
-
-  (corfu-history-mode 1)
-  (savehist-mode 1)
-  (add-to-list 'savehist-additional-variables 'corfu-history)
-
-  (defun corfu-enable-always-in-minibuffer ()
-    (setq-local corfu-auto nil)
-    (corfu-mode 1))
-  (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
-)
-(message "Finished corfu package configuration")
-
-;;;## Cape Configuration
-(use-package cape
-  :ensure t
-  :init
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  ;; kinda confusing re length, WIP/TODO
-  ;; :hook (org-mode . (lambda () (add-to-list 'completion-at-point-functions #'cape-dabbrev)))
-  ;; :config
-  ;; (setq dabbrev-check-other-buffers nil
-  ;;       dabbrev-check-all-buffers nil
-  ;;       cape-dabbrev-min-length 6)
-  )
+     ;; You can overwrite all the codeium configs!
+     ;; for example, we recommend limiting the string sent to codeium for better performance
+     (defun my-codeium/document/text ()
+         (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+     ;; if you change the text, you should also change the cursor_offset
+     ;; warning: this is measured by UTF-8 encoded bytes
+     (defun my-codeium/document/cursor_offset ()
+         (codeium-utf8-byte-length
+             (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+     (setq codeium/document/text 'my-codeium/document/text)
+     (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
+     )
+  (message "Finished codeium package configuration")
+#+END_SRC
 
 
-(use-package company-box
+** corfu
+#+BEGIN_SRC emacs-lisp
+  (message "Started corfu package configuration")
+  ;;;## Corfu configuration
+  (use-package corfu
     :ensure t
+    :init
+    (setq tab-always-indent 'complete)
+    (global-corfu-mode)
     :config
-    (setq company-box-max-candidates 50
-          company-frontends '(company-tng-frontend company-box-frontend)
-          company-box-icons-alist 'company-box-icons-all-the-icons))
+    (setq corfu-auto t
+          corfu-echo-documentation t
+          corfu-scroll-margin 0
+          corfu-count 8
+          corfu-max-width 50
+          corfu-min-width corfu-max-width
+          corfu-auto-prefix 2)
 
-(with-eval-after-load 'company
-  (define-key company-active-map
-              (kbd "TAB")
-              #'company-complete-common-or-cycle)
-  (define-key company-active-map
-              (kbd "<backtab>")
-              (lambda ()
-                (interactive)
-                (company-complete-common-or-cycle -1))))
+    (corfu-history-mode 1)
+    (savehist-mode 1)
+    (add-to-list 'savehist-additional-variables 'corfu-history)
 
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "M-.") #'company-show-location)
-  (define-key company-active-map (kbd "RET") nil))
+    (defun corfu-enable-always-in-minibuffer ()
+      (setq-local corfu-auto nil)
+      (corfu-mode 1))
+    (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
+  )
+  (message "Finished corfu package configuration")
+#+END_SRC
 
 
-;;;## Company Configuration
-;; Source: https://github.com/Exafunction/codeium.el
+** Cape Configuration
+
+#+BEGIN_SRC emacs-lisp
+  (use-package cape
+    :ensure t
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    ;; kinda confusing re length, WIP/TODO
+    ;; :hook (org-mode . (lambda () (add-to-list 'completion-at-point-functions #'cape-dabbrev)))
+    ;; :config
+    ;; (setq dabbrev-check-other-buffers nil
+    ;;       dabbrev-check-all-buffers nil
+    ;;       cape-dabbrev-min-length 6)
+    )
+#+END_SRC
+
+
+** company-box
+
+#+BEGIN_SRC emacs-lisp
+(use-package company-box
+      :ensure t
+      :config
+      (setq company-box-max-candidates 50
+            company-frontends '(company-tng-frontend company-box-frontend)
+            company-box-icons-alist 'company-box-icons-all-the-icons))
+
+  (with-eval-after-load 'company
+    (define-key company-active-map
+                (kbd "TAB")
+                #'company-complete-common-or-cycle)
+    (define-key company-active-map
+                (kbd "<backtab>")
+                (lambda ()
+                  (interactive)
+                  (company-complete-common-or-cycle -1))))
+
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "M-.") #'company-show-location)
+    (define-key company-active-map (kbd "RET") nil))
+#+END_SRC
+
+
+** Company Configuration
+Source: https://github.com/Exafunction/codeium.el
+
+#+BEGIN_SRC emacs-lisp
 (use-package company
-  :ensure t
-  :defer 0.1
-  :hook ((emacs-lisp-mode . (lambda ()
-                              (setq-local company-backends '(company-elisp))))
-         (emacs-lisp-mode . company-mode))
+    :ensure t
+    :defer 0.1
+    :hook ((emacs-lisp-mode . (lambda ()
+                                (setq-local company-backends '(company-elisp))))
+           (emacs-lisp-mode . company-mode))
 
-  :config
-  (global-company-mode t)
-  (company-tng-configure-default) ; restore old tab behavior
-  (setq-default
-   company-idle-delay 0.05
-   company-require-match nil
-   company-minimum-prefix-length 1
-   ;; get only preview
-   ;; company-frontends '(company-preview-frontend)
-   ;; also get a drop down
-   company-frontends '(company-pseudo-tooltip-frontend company-preview-frontend)
-   ))
+    :config
+    (global-company-mode t)
+    (company-tng-configure-default) ; restore old tab behavior
+    (setq-default
+     company-idle-delay 0.05
+     company-require-match nil
+     company-minimum-prefix-length 1
+     ;; get only preview
+     ;; company-frontends '(company-preview-frontend)
+     ;; also get a drop down
+     company-frontends '(company-pseudo-tooltip-frontend company-preview-frontend)
+     ))
+#+END_SRC
 
 
-;;;;;; Extra Completion Functions
-(use-package consult
- :ensure t
- :after vertico
- :bind (("C-x b"       . consult-buffer)
-        ("C-x C-k C-k" . consult-kmacro)
-        ("C-x C-o"     . consult-outline)
-        ("M-y"         . consult-yank-pop)
-        ("M-g g"       . consult-goto-line)
-        ("M-g M-g"     . consult-goto-line)
-        ("M-g f"       . consult-flymake)
-        ("M-g i"       . consult-imenu)
-        ("M-s l"       . consult-line)
-        ("M-s L"       . consult-line-multi)
-        ("M-s u"       . consult-focus-lines)
-        ("M-s g"       . consult-ripgrep)
-        ("M-s M-g"     . consult-ripgrep)
-        ("C-x C-SPC"   . consult-global-mark)
-        ("C-x M-:"     . consult-complex-command)
-;        ("C-c n"       . consult-org-agenda)
-        ("C-c m"       . my/notegrep)
-        :map help-map
-        ("a" . consult-apropos)
-        :map minibuffer-local-map
-        ("M-r" . consult-history))
- :custom
- (completion-in-region-function #'consult-completion-in-region)
- :config
- (defun my/notegrep ()
-   "Use interactive grepping to search my notes"
-   (interactive)
-   (consult-ripgrep org-directory))
- (recentf-mode t))
-(use-package consult-dir
- :ensure t
- :bind (("C-x C-j" . consult-dir)
-        ;; :map minibuffer-local-completion-map
-        :map vertico-map
-        ("C-x C-j" . consult-dir)))
+** consult
+Extra Completion Functions
+#+BEGIN_SRC emacs-lisp
+  (use-package consult
+   :ensure t
+   :after vertico
+   :bind (("C-x b"       . consult-buffer)
+          ("C-x C-k C-k" . consult-kmacro)
+          ("C-x C-o"     . consult-outline)
+          ("M-y"         . consult-yank-pop)
+          ("M-g g"       . consult-goto-line)
+          ("M-g M-g"     . consult-goto-line)
+          ("M-g f"       . consult-flymake)
+          ("M-g i"       . consult-imenu)
+          ("M-s l"       . consult-line)
+          ("M-s L"       . consult-line-multi)
+          ("M-s u"       . consult-focus-lines)
+          ("M-s g"       . consult-ripgrep)
+          ("M-s M-g"     . consult-ripgrep)
+          ("C-x C-SPC"   . consult-global-mark)
+          ("C-x M-:"     . consult-complex-command)
+  ;        ("C-c n"       . consult-org-agenda)
+          ("C-c m"       . my/notegrep)
+          :map help-map
+          ("a" . consult-apropos)
+          :map minibuffer-local-map
+          ("M-r" . consult-history))
+   :custom
+   (completion-in-region-function #'consult-completion-in-region)
+   :config
+   (defun my/notegrep ()
+     "Use interactive grepping to search my notes"
+     (interactive)
+     (consult-ripgrep org-directory))
+   (recentf-mode t))
+  (use-package consult-dir
+   :ensure t
+   :bind (("C-x C-j" . consult-dir)
+          ;; :map minibuffer-local-completion-map
+          :map vertico-map
+          ("C-x C-j" . consult-dir)))
 
-(use-package consult-recoll
- :bind (("M-s r" . counsel-recoll)
-        ("C-c I" . recoll-index))
- :init
- (setq consult-recoll-inline-snippets t)
- :config
- (defun recoll-index (&optional arg) (interactive)
-   (start-process-shell-command "recollindex"
-                                "*recoll-index-process*"
-                                  "recollindex")))
-(message "Finished package configurations C")
+  (use-package consult-recoll
+   :bind (("M-s r" . counsel-recoll)
+          ("C-c I" . recoll-index))
+   :init
+   (setq consult-recoll-inline-snippets t)
+   :config
+   (defun recoll-index (&optional arg) (interactive)
+     (start-process-shell-command "recollindex"
+                                  "*recoll-index-process*"
+                                    "recollindex")))
+#+END_SRC
+
+#+BEGIN_SRC
+  (message "Finished package configurations C")
 #+END_SRC
 
 
@@ -2073,6 +2150,7 @@ Usage: M-x ct
 (message "Start package configurations O.")
 #+END_SRC
 
+** orderless
 #+BEGIN_SRC emacs-lisp
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
@@ -2086,7 +2164,7 @@ Usage: M-x ct
         completion-category-overrides '((file (styles partial-completion)))))
 #+END_SRC
 
-** BEGINNING of org-agenda
+** org-agenda
 
 #+BEGIN_SRC emacs-lisp
 (define-key org-mode-map (kbd "M-i") 'org-insert-item)
@@ -2162,7 +2240,7 @@ I may switch to using Tags because they are visible in org files.
 I tried and they are not leading to the expect list of TODOs in org-agenda.
 I am stumped.
 
-In the meantime, enter ~C-c \~ inside JournalArticles.org to narrow the focus to the list of TODOs or enter ~C-c i b~ to get an indirect buffer.
+In the meantime, enter ~C-c \~ inside JournalArticles.org to narrow the focus to the list of TODOs or enter ~C-c i b~ to have the todos shown in an indirect buffer.
 
 
 #+BEGIN_SRC emacs-lisp
@@ -2238,6 +2316,7 @@ I learned about the following function, which I modified by changing "Headline "
 Lionel Henry]] with the modification by Phil on July 1, 2018.
 
 
+** org-ask-location
 #+BEGIN_SRC emacs-lisp
 (defun org-ask-location ()
   (let* ((org-refile-targets '((nil :maxlevel . 9)))
@@ -2255,6 +2334,7 @@ Lionel Henry]] with the modification by Phil on July 1, 2018.
       (insert "* " hd "\n")))
   (end-of-line))
 
+** org-capture-templates
 
 (setq org-capture-templates
  '(
