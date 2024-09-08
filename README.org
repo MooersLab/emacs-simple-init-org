@@ -652,48 +652,6 @@ Run this function to generate a TOC for an org-file.
 The items in the TOC will be hyperlinked to the headlines in the body of the org file.
 
 #+BEGIN_SRC emacs-lisp
-    (defun org-generate-toc ()
-      "Generate a table of contents for the current Org-mode buffer."
-      (interactive)
-      (let ((toc-buffer (get-buffer-create "*Org TOC*"))
-            (toc-entries '()))
-        (save-excursion
-          (goto-char (point-min))
-          (while (re-search-forward org-heading-regexp nil t)
-            (let ((level (org-current-level))
-                  (headline (match-string-no-properties 0))
-                  (link (concat "[[" (concat "#" (org-get-heading t t t t)) "][" headline "]]")))
-              (push (concat (make-string level ?*) " " link) toc-entries))))
-        (with-current-buffer toc-buffer
-          (erase-buffer)
-          (insert "#+TOC: headlines\n")
-          (dolist (entry (nreverse toc-entries))
-            (insert entry "\n")))
-        (switch-to-buffer-other-window toc-buffer)
-        (org-mode)))
-
-
-
-  (defun org-generate-toc ()
-    "Generate a table of contents for the current Org-mode buffer."
-    (interactive)
-    (let ((toc-buffer (get-buffer-create "*Org TOC*"))
-          (toc-entries '()))
-      (save-excursion
-        (goto-char (point-min))
-        (while (re-search-forward org-heading-regexp nil t)
-          (let ((level (org-current-level))
-                (headline (match-string-no-properties 0))
-                (link (org-make-link-string (concat  (concat "[[" (org-get-heading t t t t)) "]]")))
-            (push (concat (make-string level ?*) " " link) toc-entries))))
-      (with-current-buffer toc-buffer
-        (erase-buffer)
-        (insert "#+TOC: headlines\n")
-        (dolist (entry (nreverse toc-entries))
-          (insert entry "\n")))
-      (switch-to-buffer-other-window toc-buffer)
-      (org-mode))))
-
 (defun org-generate-toc ()
   "Generate a table of contents for the current Org-mode buffer."
   (interactive)
@@ -715,21 +673,6 @@ The items in the TOC will be hyperlinked to the headlines in the body of the org
     (org-mode)))
 
 (global-set-key (kbd "C-c t") 'org-generate-toc)
-
-
-
-
-
-
-
-
-  (global-set-key (kbd "C-c t") 'org-generate-toc)
-
-
-
-
-    (global-set-key (kbd "C-c t") 'org-generate-toc)
-
 #+END_SRC
 
 
@@ -752,6 +695,96 @@ I need to make a varient for LaTeX minted code environment.
   (global-set-key (kbd "C-c w") 'wrap-region-with-org-src-block)
 #+END_SRC
 
+** create-latex-table-with-caption 
+
+This interactive function prompts the user for the number of rows, columns, caption, and label. 
+Then this function generates a table that has a top Rule and a rule below the column labels. 
+It also has a bottom rule. It does not contain any vertical rules.
+This function required five rounds of iteration with Copilot.
+It was developed after developing the function below: create-org-table-with-caption.
+That code was used as a template for Copilot.
+It in turn had been developed after four or five rounds of iteration.
+
+
+#+BEGIN_SRC emacs-lisp
+(defun create-latex-table-with-caption ()
+  (interactive)
+  (let ((rows (read-number "Enter the number of rows: "))
+        (cols (read-number "Enter the number of columns: "))
+        (caption (read-string "Enter the table's caption: "))
+        (label (read-string "Enter the table's label: ")))
+    (insert (format "\\begin{table}[h]\n\\centering\n\\caption{%s \\label{%s}}\n\\begin{tabular}{%s}\n\\hline\n"
+                    caption label (make-string cols ?c)))
+    ;; Insert column labels
+    (dotimes (col cols)
+      (insert (format " %c " (+ ?A col)))
+      (if (< col (1- cols))
+          (insert "&")))
+    (insert " \\\\\n\\hline\n")
+    ;; Insert table rows
+    (dotimes (_ rows)
+      (dotimes (col cols)
+        (insert (format " Cell %d-%d " (1+ col) (1+ _)))
+        (if (< col (1- cols))
+            (insert "&")))
+      (insert " \\\\\n"))
+    (insert "\\hline\n\\end{tabular}\n\\end{table}\n")))
+#+END_SRC
+
+
+
+
+** create-org-table-with-caption
+
+This interactive function prompts the user for the number of rows. columns, and the caption of the table.
+
+
+#+BEGIN_SRC emacs-lisp
+(defun create-org-table-with-caption ()
+"This interactive function prompts the user for the number of rows. columns, and the caption of the table."
+  (interactive)
+  (let ((rows (read-number "Enter the number of rows: "))
+        (cols (read-number "Enter the number of columns: "))
+        (label (read-string "Enter the table label: "))
+        (caption (read-string "Enter the table's caption: ")))
+    (insert (format "#+CAPTION: %s \\label{%s}\n" caption label))
+    (insert (format "#+NAME: %s\n" label))
+    (insert "|")
+    (dotimes (_ cols)
+      (insert "----+"))
+    (insert "\n|")
+    ;;(insert "|")
+    (dotimes (col cols)
+      (insert (format " %c |" (+ ?A col))))
+    (insert "\n|")
+    (dotimes (_ cols)
+      (insert "----+"))
+    (insert "\n")
+    (dotimes (_ rows)
+      (insert "|")
+      (dotimes (_ cols)
+        (insert "     |"))
+      (insert "\n"))
+    (insert "|")
+    (dotimes (_ cols)
+      (insert "----+"))))
+#+END_SRC
+
+*** insert-org-captioned-figure
+
+The function prompts the user for the image file path and name, the label, and the caption.
+
+#+BEGIN_SRC emacs-lisp
+(defun insert-org-captioned-figure ()
+  "Insert a captioned figure in Org-mode."
+  (interactive)
+  (let ((image-name (read-string "Enter the image file path: "))
+        (label (read-string "Enter the figure label: "))
+        (caption (read-string "Enter the figure caption: ")))
+    (insert (format "#+CAPTION: %s \\label{%s}\n" caption label))
+    (insert (format "#+NAME: %s\n" label))
+    (insert (format "[[file:%s]]\n" image-name))))
+#+END_SRC
 
 
 #+BEGIN_SRC emacs-lisp
@@ -1278,7 +1311,6 @@ Combined with emacs-mac, this gives good PDF quality for [[https://www.aidanscan
 ** Window management
 winner-mode C-c <rigth> undo change C-c <left> redo change
 
-
 #+BEGIN_SRC emacs-lisp
 (winner-mode 1)
 
@@ -1288,16 +1320,12 @@ winner-mode C-c <rigth> undo change C-c <left> redo change
   (command-execute 'balance-windows))
 (global-set-key (kbd "C-x 2") 'split-vertical-evenly)
 
-
 (defun split-horizontal-evenly ()
   (interactive)
   (command-execute 'split-window-horizontally)
   (command-execute 'balance-windows))
 (global-set-key (kbd "C-x 3") 'split-horizontal-evenly)
 #+END_SRC
-
-
-
 
 
 ** Zoom text in and out. Very Sweet!
@@ -2148,12 +2176,9 @@ This is super powerful.
      (R . t)
      (jupyter . t))
   )
-
   ;; Removed  ~(jupyter . t)~ on May 14 due to an error message.
-
   ;; By default, you need to specify julia-vterm as the language name for source blocks.
   ;; To use julia as the language name, define the following aliases.
-
   ;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
   ;; (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
   (message "Finished org-babel configuration.")
@@ -2245,14 +2270,12 @@ This is super powerful.
 #+END_SRC
 
 
-
 ** org-pdftools
 
 #+BEGIN_SRC emacs-lisp
 (use-package org-pdftools
   :hook (org-mode . org-pdftools-setup-link))
 #+END_SRC
-
 
 
 ** org-noter-pdftools
@@ -2297,7 +2320,6 @@ With a prefix ARG, remove start location."
 #+END_SRC
 
 
-
 ** org-pomodoro
 
 #+BEGIN_SRC emacs-lisp
@@ -2336,25 +2358,25 @@ With a prefix ARG, remove start location."
 
 
 
-#+BEGIN_SRC emacs-lisp
-; (message "Start org-ref configuration. Line 1610.")
-; ;; John Kitchin's config on YouTube https://www.youtube.com/watch?v=3u6eTSzHT6s
-; ; (use-package ivy-bibtex
-; ;     :init
-; ;     (setq bibtex-completion-notes-path "/Users/blaine/org-roam/references/notes/"
-; ;         bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
-; ;         bibtex-completion-additional-search-fields '(keywords)
-; ;         bibtex-completion-display-formats
-; ;         '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
-; ;           (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
-; ;           (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-; ;           (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-; ;           (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
-; ;         bibtex-completion-pdf-open-function
-; ;         (lambda (fpath)
-; ;           (call-process "open" nil 0 nil fpath)))
-; ; )
-#+END_SRC
+# #+BEGIN_SRC emacs-lisp
+# ; (message "Start org-ref configuration. Line 1610.")
+# ; ;; John Kitchin's config on YouTube https://www.youtube.com/watch?v=3u6eTSzHT6s
+# ; ; (use-package ivy-bibtex
+# ; ;     :init
+# ; ;     (setq bibtex-completion-notes-path "/Users/blaine/org-roam/references/notes/"
+# ; ;         bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+# ; ;         bibtex-completion-additional-search-fields '(keywords)
+# ; ;         bibtex-completion-display-formats
+# ; ;         '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+# ; ;           (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+# ; ;           (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+# ; ;           (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+# ; ;           (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+# ; ;         bibtex-completion-pdf-open-function
+# ; ;         (lambda (fpath)
+# ; ;           (call-process "open" nil 0 nil fpath)))
+# ; ; )
+# #+END_SRC
 
 ** org-ref
 Set the case of the Author and Title to Capitalize with customize.
@@ -2387,8 +2409,7 @@ Set the case of the Author and Title to Capitalize with customize.
 
 
 #+BEGIN_SRC emacs-lisp
-(message "Start bibtex-completion-bibliography configuration of org-ref. Line 1656.")
-
+(message "Start bibtex-completion-bibliography configuration of org-ref.")
 (setq bibtex-completion-bibliography '("/Users/blaine/Documents/global.bib")
     bibtex-completion-library-path '("/Users/blaine/0papersLabeled/" "/Users/blaine/0booksLabeled/")
     bibtex-completion-notes-path "/Users/blaine/org-roam/references/notes/"
@@ -2412,7 +2433,6 @@ Set the case of the Author and Title to Capitalize with customize.
       bibtex-autokey-titlewords-stretch 1
       bibtex-autokey-titleword-length 5)
 (message "Finished bibtex-completion-bibliography configuration of org-ref. Line 1691.")
-
 ;; H is the hyper key. I have bound H to Fn. For the MacAlly keyboard, it is bound to right-command.
 (define-key bibtex-mode-map (kbd "s-b") 'org-ref-bibtex-hydra/body)
 (define-key org-mode-map (kbd "s-i") org-ref-insert-cite-function)
@@ -2420,6 +2440,7 @@ Set the case of the Author and Title to Capitalize with customize.
 (define-key org-mode-map (kbd "H-l") org-ref-insert-label-function)
 (define-key org-mode-map (kbd "H-d") 'doi-add-bibtex-entry)
 #+END_SRC
+
 
 ** org-cite-insert
 
@@ -2430,7 +2451,8 @@ Set the case of the Author and Title to Capitalize with customize.
 (message "Finished org-cite configurations")
 #+END_SRC
 
-** Basic org-roam config
+
+** org-roam
 
 #+BEGIN_SRC emacs-lisp
 (message "Start org-roam configurations")
@@ -2571,9 +2593,6 @@ Place a ~:TOC:~ at the top of a file by a headline like table of contents, and i
 #   (warn "toc-org not found"))
 # +END_SRC
 
-
-
-
 #+BEGIN_SRC emacs-lisp
 (message "End package configurations O")
 #+END_SRC
@@ -2582,7 +2601,11 @@ Place a ~:TOC:~ at the top of a file by a headline like table of contents, and i
 * P
 
 #+BEGIN_SRC emacs-lisp
-(message "Start package configurations P")
+(message "Start package configurations O")
+#+END_SRC
+
+** pdf-tools
+#+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
  :pin manual ;; manually update
  :config
@@ -2594,7 +2617,10 @@ Place a ~:TOC:~ at the top of a file by a headline like table of contents, and i
  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
  :custom
  (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
+#+END_SRC
 
+** perspective
+#+BEGIN_SRC emacs-lisp
  ;; per frame workspaces like on the Macs spaces
 (use-package perspective
   :ensure t
@@ -2604,12 +2630,24 @@ Place a ~:TOC:~ at the top of a file by a headline like table of contents, and i
   (persp-mode-prefix-key (kbd "C-c M-p"))  ; pick your own prefix key here
   :init
   (persp-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (message "End package configurations P")
 #+END_SRC
 
-** S
+* Q
+
+* R
+
+* S
+
 #+BEGIN_SRC emacs-lisp
-(message "Start package configurations S")
+message "Start package configurations S")
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
 ;;*** serenade (source: https://github.com/justin-roche/serenade-mode)
 (use-package serenade-mode
   :load-path "/Users/blaine/e29org/manual-install/serenade-mode/")
@@ -2617,13 +2655,12 @@ Place a ~:TOC:~ at the top of a file by a headline like table of contents, and i
 (setq serenade-completion-frontend 'helm)
 (setq serenade-helm-M-x t)
 (setq serenade-snippet-engine 'yasnippet)
-
-(message "End package configurations S")
 #+END_SRC
 
-* Q
-* R
-* S
+#+BEGIN_SRC emacs-lisp
+(message "End package configurations S")                                                                                                                                                                                    #+END_SRC
+
+
 * T
 #+BEGIN_SRC emacs-lisp
 (message "Start package configurations T")
@@ -2725,50 +2762,71 @@ Default configuration for treemacs minus the treemacs-evil pacakge.
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
         ("C-x t M-t" . treemacs-find-tag)))
+#+END_SRC
 
+
+** treemacs-projectile
+
+#+BEGIN_SRC emacs-lisp
 (use-package treemacs-projectile
   :after (treemacs projectile)
   :ensure t)
+#+END_SRC
 
+
+** treemacs-icons-dired
+
+#+BEGIN_SRC emacs-lisp
 (use-package treemacs-icons-dired
   :hook (dired-mode . treemacs-icons-dired-enable-once)
   :ensure t)
+#+END_SRC
 
-; (use-package treemacs-magit
-;   :after (treemacs magit)
-;   :ensure t)
+# #+BEGIN_SRC emacs-lisp
+# ; (use-package treemacs-magit
+# ;   :after (treemacs magit)
+# ;   :ensure t)
+# #+END_SRC
 
+** treemacs-persp
+#+BEGIN_SRC emacs-lisp
 (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
   :after (treemacs persp-mode) ;;or perspective vs. persp-mode
   :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
-
-; (use-package treemacs-tab-bar ;;treemacs-tab-bar if you use tab-bar-mode
-;   :after (treemacs)
-;   :ensure t
-;   :config (treemacs-set-scope-type 'Tabs))
-
 (treemacs-start-on-boot)
 #+END_SRC
 
 
+** triples
+
 #+BEGIN_SRC emacs-lisp
 (use-package triples
   :load-path "/Users/blaine/e29org/manual-install/triples/")
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (message "End package configurations T")
 #+END_SRC
+
+
 
 * U
 
 #+BEGIN_SRC emacs-lisp
 (message "Start package configurations U")
+#+END_SRC
 
+** undo-tree
+
+#+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :ensure t
   :config
   (global-undo-tree-mode 1))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (message "End package configurations U")
 #+END_SRC
 
@@ -2778,8 +2836,8 @@ Default configuration for treemacs minus the treemacs-evil pacakge.
 (message "Start package configurations V")
 #+END_SRC
 
-** Vertico Configuration
 
+** Vertico Configuration
 
 #+BEGIN_SRC emacs-lisp
 (use-package vertico
@@ -2799,13 +2857,22 @@ Default configuration for treemacs minus the treemacs-evil pacakge.
   ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
   (setq vertico-cycle t)
   )
+#+END_SRC
 
+** savehist
+
+#+BEGIN_SRC emacs-lisp
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :ensure t
   :init
   (savehist-mode))
+#+END_SRC
 
+
+** emacs
+
+#+BEGIN_SRC emacs-lisp
 ;; A few more useful configurations...
 (use-package emacs
   :ensure t
@@ -2835,12 +2902,20 @@ Default configuration for treemacs minus the treemacs-evil pacakge.
   (setq enable-recursive-minibuffers t))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(message "Ended package configurations V")
+#+END_SRC
+
+
 * X
 * W
-
 #+BEGIN_SRC emacs-lisp
-(message "Start package configurations W")
-;;;## which-key
+(message "Started package configurations W")
+#+END_SRC
+
+
+** which-key
+#+BEGIN_SRC emacs-lisp
 (use-package which-key
   :ensure t
   :init
@@ -2860,48 +2935,81 @@ Default configuration for treemacs minus the treemacs-evil pacakge.
 (message "End package configurations W")
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(message "Finished package configurations W")
+#+END_SRC
+
+
 * Y
 
 #+BEGIN_SRC emacs-lisp
-(message "Start package configurations Y")
+(message "Start package configurations Y.")
+#+END_SRC
 
+** yasnippet
+
+#+BEGIN_SRC emacs-lisp
 (use-package yasnippet
   :config
   (yas-global-mode 1))
 (global-set-key "\C-o" 'yas-expand)
 (global-set-key "\C-c y i" 'yas-insert-snippet)
 (global-set-key "\C-c y n" 'yas-new-snippet)
+#+END_SRC
 
+** my-hydras
 
-;;;### my-hydras
-;; load hydras
-;;(use-package talon-quiz-hydra
-;;  :load-path "~/emacs29.3/my-hydras/")
-;;(global-set-key (kbd "C-c 9") 'talon-quiz-hydra/body)
+*** writing-projects-hydra
 
+#+BEGIN_SRC emacs-lisp
 (use-package writing-projects-hydra
   :load-path "~/emacs29.3/my-hydras/")
 (global-set-key (kbd "C-c 9") 'writing-projects-hydra/body)
+#+END_SRC
 
+
+*** learning-packages-and-modes-hydras
+
+#+BEGIN_SRC emacs-lisp
 (use-package learning-packages-and-modes-hydras
   :load-path "~/emacs29.3/my-hydras/")
 (global-set-key (kbd "C-c 2") 'learning-packages-and-modes-hydras/body)
+#+END_SRC
 
+
+*** learning-spiral-hydras
+
+#+BEGIN_SRC emacs-lisp
 (use-package learning-spiral-hydras
   :load-path "~/emacs29.3/my-hydras/")
 (global-set-key (kbd "C-c 1") 'hydra-of-learning-spiral/body)
+#+END_SRC
 
+
+*** my-hydras
+
+#+BEGIN_SRC emacs-lisp
 (use-package my-hydras
   :load-path "~/emacs29.3/my-hydras/")
 (global-set-key (kbd "C-c 0") 'hydra-of-hydras/body)
+#+END_SRC
 
 
+*** hydra
 
-;; A cool hydra for finding snippets at point. Invoke with C-c y.
+A cool hydra for finding snippets at point. 
+Invoke with C-c y.
+#+BEGIN_SRC emacs-lisp
 (use-package hydra
   :defer 2
   :bind ("C-c y" . hydra-yasnippet/body))
+#+END_SRC
 
+
+
+** popup
+
+#+BEGIN_SRC emacs-lisp
 (use-package popup)
 ;; add some shotcuts in popup menu mode
 (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
@@ -2925,15 +3033,21 @@ Default configuration for treemacs minus the treemacs-evil pacakge.
      :isearch t
      )))
 (setq yas/prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
 (use-package license-snippets
     :load-path "/Users/blaine/emacs29.3/manual-packages/license-snippets")
 (license-snippets-init)
-(message "Fnished Y package configurations!!")
+#+END_SRC
 
-(message "Fnished package configurations!!")
+#+BEGIN_SRC emacs-lisp
+(message "Fnished Y package configurations!!")
 #+END_SRC
 
 
 * Z
 
+#+BEGIN_SRC emacs-lisp
+(message "Finished package configurations!!")
+#+END_SRC
